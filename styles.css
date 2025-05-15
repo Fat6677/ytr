@@ -1,0 +1,99 @@
+/* Gaya dasar untuk seluruh halaman */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: #222;
+  color: #eee;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Judul utama */
+h1 {
+  margin-bottom: 1rem;
+  text-align: center;
+  text-shadow: 0 0 5px #0ff;
+}
+
+/* Gaya untuk elemen video */
+video {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  background: black;
+  box-shadow: 0 0 20px #0ff;
+  transform: scaleX(-1); /* cermin untuk kamera depan */
+}
+
+/* Gaya gambar hasil snapshot */
+#snapshot {
+  margin-top: 1rem;
+  max-width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #0ff;
+  display: none;
+}
+
+/* Kontainer tombol filter */
+.filters {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  max-width: 400px;
+}
+
+/* Tombol filter */
+.filter-btn {
+  background: #0ff;
+  border: none;
+  padding: 0.5rem 1.1rem;
+  border-radius: 50px;
+  font-weight: 600;
+  color: #222;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.7);
+}
+
+/* Tombol filter aktif atau saat hover */
+.filter-btn.active,
+.filter-btn:hover {
+  background: #06c;
+  color: white;
+  box-shadow: 0 0 12px rgba(0, 102, 204, 0.9);
+}
+
+/* Tombol tangkap gambar */
+button#capture-btn {
+  margin-top: 1rem;
+  background: #0ff;
+  border: none;
+  font-weight: 700;
+  padding: 0.75rem 2rem;
+  border-radius: 40px;
+  color: #222;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover untuk tombol tangkap gambar */
+button#capture-btn:hover {
+  background: #06c;
+  color: white;
+  box-shadow: 0 0 20px rgba(0, 102, 204, 0.9);
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}

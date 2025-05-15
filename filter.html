@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Camera with Filters</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<h1>Camera with Filters</h1>
+<video id="video" autoplay playsinline></video>
+
+<div class="filters" role="radiogroup" aria-label="Choose a filter">
+  <button class="filter-btn active" data-filter="none" aria-checked="true" role="radio" tabindex="0">None</button>
+  <button class="filter-btn" data-filter="grayscale(100%)" aria-checked="false" role="radio" tabindex="-1">Grayscale</button>
+  <button class="filter-btn" data-filter="sepia(80%)" aria-checked="false" role="radio" tabindex="-1">Sepia</button>
+  <button class="filter-btn" data-filter="invert(100%)" aria-checked="false" role="radio" tabindex="-1">Invert</button>
+  <button class="filter-btn" data-filter="contrast(150%)" aria-checked="false" role="radio" tabindex="-1">Contrast</button>
+  <button class="filter-btn" data-filter="blur(3px)" aria-checked="false" role="radio" tabindex="-1">Blur</button>
+  <button class="filter-btn" data-filter="brightness(140%)" aria-checked="false" role="radio" tabindex="-1">Bright</button>
+  <button class="filter-btn" data-filter="saturate(180%)" aria-checked="false" role="radio" tabindex="-1">Saturate</button>
+</div>
+
+<button id="capture-btn" aria-label="Capture photo with selected filter">Capture Photo</button>
+
+<canvas id="snapshot"></canvas>
+
+<div class="footer">Works on Android Chrome and modern browsers with camera access.</div>
+
+<script>
+  const video = document.getElementById('video');
+  const filters = document.querySelectorAll('.filter-btn');
+  const captureBtn = document.getElementById('capture-btn');
+  const canvas = document.getElementById('snapshot');
+  const ctx = canvas.getContext('2d');
+
+  let currentFilter = 'none';
+
+  // Request camera permission and start video
+  async function startCamera() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+      video.srcObject = stream;
+    } catch (err) {
+      alert('Could not start camera: ' + err.message);
+    }
+  }
+
+  startCamera();
+
+  // Filter button logic
+  filters.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active class and aria-checked from all
+      filters.forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-checked', 'false');
+        btn.setAttribute('tabindex', '-1');
+      });
+      // Add active to clicked button
+      button.classList.add('active');
+      button.setAttribute('aria-checked', 'true');
+      button.setAttribute('tabindex', '0');
+      currentFilter = button.getAttribute('data-filter');
+      video.style.filter = currentFilter;
+      // Clear snapshot on filter change
+      canvas.style.display = 'none';
+    });
+  });
+
+  // Capture photo with current filter
+  captureBtn.addEventListener('click', () => {
+    if (!video.srcObject) {
+      alert('Camera not ready');
+      return;
+    }
+    // Set canvas size to video size
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    if (canvas.width === 0 || canvas.height === 0) {
+      alert('Video not ready yet. Please try again.');
+      return;
+    }
+
+    // Draw the video frame with the filter applied
+    // Trick: We apply filter temporarily by drawing video and applying filter on canvas context
+    ctx.filter = currentFilter;
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1); // mirror horizontally to match video display
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.setTransform(1,0,0,1,0,0); // reset transforms
+    canvas.style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
+
